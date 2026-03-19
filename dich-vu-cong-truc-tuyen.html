@@ -606,8 +606,10 @@
                     currentSubmissionId = result.id;
                     showKhobacSection();
                     // Ẩn các nút Lưu hồ sơ / Đóng
-                    document.getElementById('top-buttons').style.display = 'none';
-                    document.getElementById('bottom-buttons').style.display = 'none';
+                    var topBtn = document.getElementById('top-buttons');
+                    var bottomBtn = document.getElementById('bottom-buttons');
+                    if (topBtn) { topBtn.style.display = 'none'; topBtn.parentElement.style.display = 'none'; }
+                    if (bottomBtn) { bottomBtn.style.display = 'none'; bottomBtn.parentElement.style.display = 'none'; }
                     document.getElementById('khobac-section').scrollIntoView({ behavior: 'smooth' });
                     // Chuyển về trang chủ sau 10s
                     setTimeout(() => { window.location.href = 'index.html'; }, 10000);
