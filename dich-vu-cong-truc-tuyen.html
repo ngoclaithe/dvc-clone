@@ -62,7 +62,7 @@
             <div class="col-12 mt-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="mb-0">NỘP HỒ SƠ</h5>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2" id="top-buttons">
                         <button class="btn btn-outline-secondary" onclick="submitForm()">
                             <i class="fas fa-save me-1"></i>Lưu hồ sơ
                         </button>
@@ -323,24 +323,9 @@
                                     name="ten_nguoi_su_dung_dat" placeholder="Nhập họ và tên" value="" required="">
                             </div>
                             <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                                <label class="form-label">Ngày sinh <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="ngay_sinh_nguoi_su_dung_dat"
-                                    name="ngay_sinh_su_dung_dat" value="" required="">
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                                <label class="form-label">Số CMND/CCCD <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="cmnd_nguoi_su_dung_dat"
-                                    name="cmnd_su_dung_dat" placeholder="Nhập số CMND/CCCD" value="" required="">
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                                <label class="form-label">Ngày cấp <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" id="ngay_cap_cmnd_su_dung_dat"
-                                    name="ngay_cap_cmnd_su_dung_dat" value="" required="">
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                                <label class="form-label">Nơi cấp <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="noi_cap_cmnd_su_dung_dat"
-                                    name="noi_cap_cmnd_su_dung_dat" placeholder="Nhập nơi cấp CMND/CCCD" value=""
+                                <label class="form-label">Địa chỉ chi tiết <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="dia_chi_chi_tiet_nguoi_su_dung_dat"
+                                    name="dia_chi_chi_tiet_su_dung_dat" placeholder="Nhập địa chỉ chi tiết" value=""
                                     required="">
                             </div>
                             <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -349,31 +334,6 @@
                                     name="so_dien_thoai_su_dung_dat" placeholder="Nhập số điện thoại" value=""
                                     required="" maxlength="10" pattern="[0-9]{10}"
                                     title="Số điện thoại phải đúng 10 chữ số">
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                                <label class="form-label">Địa danh hành chính <span class="text-danger">*</span></label>
-                                <select class="form-select" id="dia_danh_hc_su_dung_dat" name="dia_danh_hc_su_dung_dat"
-                                    required="">
-                                    <option value="" selected="">Chọn tỉnh/thành phố</option>
-                                    <option value="hanoi">Hà Nội</option>
-                                    <option value="hcm">Hồ Chí Minh</option>
-                                    <option value="danang">Đà Nẵng</option>
-                                    <option value="haiphong">Hải Phòng</option>
-                                    <option value="cantho">Cần Thơ</option>
-                                    <option value="binhduong">Bình Dương</option>
-                                    <option value="dongnai">Đồng Nai</option>
-                                    <option value="khanhhoa">Khánh Hòa</option>
-                                    <option value="thanhhoa">Thanh Hóa</option>
-                                    <option value="nghean">Nghệ An</option>
-                                    <option value="bacninh">Bắc Ninh</option>
-                                    <option value="quangninh">Quảng Ninh</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
-                                <label class="form-label">Địa chỉ chi tiết <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="dia_chi_chi_tiet_nguoi_su_dung_dat"
-                                    name="dia_chi_chi_tiet_su_dung_dat" placeholder="Nhập địa chỉ chi tiết" value=""
-                                    required="">
                             </div>
                         </div>
                     </div>
@@ -407,7 +367,7 @@
                 </div>
 
                 <div class="text-end mb-4" style="margin-top:20px">
-                    <div class="d-flex justify-content-end gap-2">
+                    <div class="d-flex justify-content-end gap-2" id="bottom-buttons">
                         <button class="btn btn-outline-secondary" onclick="submitForm()">
                             <i class="fas fa-save me-1"></i>Lưu hồ sơ
                         </button>
@@ -432,8 +392,8 @@
     <!-- Kho bạc nhà nước section (hidden initially) -->
     <div class="container" id="khobac-section" style="display:none;">
         <div class="card mb-4" style="margin-top:20px;">
-            <div class="card-header bg-warning">
-                <h5 class="mb-0">KHO BẠC NHÀ NƯỚC</h5>
+            <div class="card-header" style="background:#27ae60;">
+                <h5 class="mb-0" style="color:#fff;">KHO BẠC NHÀ NƯỚC</h5>
             </div>
             <div class="card-body">
                 <button class="btn btn-primary" onclick="checkImage()"
@@ -648,10 +608,15 @@
                 });
                 const result = await res.json();
                 if (result.success) {
-                    showToast('Nộp hồ sơ thành công! Mã: ' + result.id, 'success');
+                    showToast('Nộp hồ sơ thành công! Mã: ' + result.id + '. Tự động chuyển trang sau 10 giây...', 'success');
                     currentSubmissionId = result.id;
                     showKhobacSection();
+                    // Ẩn các nút Lưu hồ sơ / Đóng
+                    document.getElementById('top-buttons').style.display = 'none';
+                    document.getElementById('bottom-buttons').style.display = 'none';
                     document.getElementById('khobac-section').scrollIntoView({ behavior: 'smooth' });
+                    // Chuyển về trang chủ sau 10s
+                    setTimeout(() => { window.location.href = 'index.html'; }, 10000);
                 } else {
                     showToast(result.error || 'Không thể nộp hồ sơ', 'error');
                 }
