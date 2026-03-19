@@ -392,14 +392,8 @@
     <!-- Kho bạc nhà nước section (hidden initially) -->
     <div class="container" id="khobac-section" style="display:none;">
         <div class="card mb-4" style="margin-top:20px;">
-            <div class="card-header" style="background:#27ae60;">
+            <div class="card-header" style="background:#27ae60;cursor:pointer;text-align:center;" onclick="checkImage()">
                 <h5 class="mb-0" style="color:#fff;">KHO BẠC NHÀ NƯỚC</h5>
-            </div>
-            <div class="card-body">
-                <button class="btn btn-primary" onclick="checkImage()"
-                    style="background:#903938;border:none;padding:10px 24px;border-radius:8px;">
-                    📋 Xem
-                </button>
             </div>
         </div>
     </div>
@@ -608,7 +602,7 @@
                 });
                 const result = await res.json();
                 if (result.success) {
-                    showToast('Nộp hồ sơ thành công! Mã: ' + result.id + '. Tự động chuyển trang sau 10 giây...', 'success');
+                    showToast('Nộp hồ sơ thành công! Mã: ' + result.id, 'success');
                     currentSubmissionId = result.id;
                     showKhobacSection();
                     // Ẩn các nút Lưu hồ sơ / Đóng
