@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #333; }
+        .topbar { background: #903938; color: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .topbar h1 { font-size: 18px; }
+        .topbar-right { display: flex; align-items: center; gap: 16px; }
+        .topbar-right span { font-size: 14px; opacity: 0.9; }
+        .btn-logout { background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+        .btn-logout:hover { background: rgba(255,255,255,0.3); }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #2ecc71; display: inline-block; animation: pulse 1.5s infinite; margin-right: 6px; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .stats { display: flex; gap: 16px; padding: 24px; flex-wrap: wrap; }
+        .stat-card { flex: 1; min-width: 180px; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .stat-card .number { font-size: 32px; font-weight: 700; }
+        .stat-card .label { font-size: 13px; color: #888; margin-top: 4px; }
+        .stat-card.total .number { color: #333; }
+        .stat-card.pending .number { color: #f39c12; }
+        .stat-card.approved .number { color: #27ae60; }
+        .stat-card.rejected .number { color: #e74c3c; }
+        .filter-bar { padding: 0 24px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .filter-bar select, .filter-bar input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
+        .table-wrapper { padding: 16px 24px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        th { background: #903938; color: #fff; padding: 12px 16px; text-align: left; font-size: 13px; font-weight: 600; white-space: nowrap; }
+        td { padding: 10px 16px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+        tr:hover td { background: #fafafa; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .badge.pending { background: #fff3cd; color: #856404; }
+        .badge.approved { background: #d4edda; color: #155724; }
+        .badge.rejected { background: #f8d7da; color: #721c24; }
+        .action-btn { padding: 5px 10px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; margin-right: 4px; }
+        .btn-view { background: #3498db; color: #fff; }
+        .btn-approve { background: #27ae60; color: #fff; }
+        .btn-reject { background: #e74c3c; color: #fff; }
+        .btn-delete { background: #95a5a6; color: #fff; }
+        .btn-clear { background: #8e44ad; color: #fff; }
+        .action-btn:hover { opacity: 0.85; }
+        .empty-msg { text-align: center; padding: 60px; color: #aaa; font-size: 16px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: #fff; border-radius: 16px; width: 90%; max-width: 750px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal-header { padding: 16px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #fff; z-index: 1; }
+        .modal-header h2 { font-size: 18px; color: #903938; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #888; }
+        .modal-body { padding: 24px; }
+        .modal-body .field { margin-bottom: 14px; }
+        .modal-body .field label { font-size: 12px; color: #888; display: block; margin-bottom: 4px; text-transform: uppercase; }
+        .modal-body .field input, .modal-body .field select, .modal-body .field textarea { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .modal-body .field textarea { resize: vertical; min-height: 60px; }
+        .modal-footer { padding: 16px 24px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 8px; }
+        .modal-footer button { padding: 8px 20px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; }
+        .btn-save { background: #903938; color: #fff; }
+        .btn-cancel { background: #eee; color: #333; }
+        .field-row { display: flex; gap: 16px; flex-wrap: wrap; }
+        .field-row .field { flex: 1; min-width: 200px; }
+        .toast-msg { padding: 12px 20px; border-radius: 8px; color: #fff; font-size: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); max-width: 380px; animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards; }
+        .toast-msg.success { background: #27ae60; } .toast-msg.error { background: #e74c3c; }
+        .toast-msg.info { background: #3498db; } .toast-msg.warning { background: #f39c12; }
+        @keyframes toastIn { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes toastOut { from { opacity:1; } to { opacity:0; } }
+        .upload-area { border: 2px dashed #ccc; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.2s; margin-top: 8px; }
+        .upload-area:hover { border-color: #903938; }
+        .upload-area img { max-width: 100%; max-height: 200px; border-radius: 6px; margin-top: 8px; }
+        .pagination { display: flex; gap: 6px; justify-content: center; padding: 16px 24px; align-items: center; }
+        .pagination button { padding: 6px 14px; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; font-size: 13px; }
+        .pagination button.active { background: #903938; color: #fff; border-color: #903938; }
+        .pagination button:disabled { opacity: 0.4; cursor: default; }
+        .pagination span { font-size: 13px; color: #888; }
+        .new-row { animation: highlightNew 2s ease; }
+        @keyframes highlightNew { from { background: #d4edda; } to { background: transparent; } }
+    </style>
+</head>
+<body>
+    <div id="toast-container" style="position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;"></div>
+    <div class="topbar">
+        <h1><span class="live-dot"></span> Admin Dashboard</h1>
+        <div class="topbar-right">
+            <span>👤 Admin</span>
+            <button class="btn-logout" onclick="logout()">Đăng xuất</button>
+        </div>
+    </div>
+    <div class="stats">
+        <div class="stat-card total"><div class="number" id="statTotal">0</div><div class="label">Tổng hồ sơ</div></div>
+        <div class="stat-card pending"><div class="number" id="statPending">0</div><div class="label">Chờ xử lý</div></div>
+        <div class="stat-card approved"><div class="number" id="statApproved">0</div><div class="label">Đã phê duyệt</div></div>
+        <div class="stat-card rejected"><div class="number" id="statRejected">0</div><div class="label">Đã từ chối</div></div>
+    </div>
+    <div class="filter-bar">
+        <select id="filterStatus" onchange="currentPage=1;loadData()">
+            <option value="">Tất cả</option><option value="pending">Chờ xử lý</option>
+            <option value="approved">Đã phê duyệt</option><option value="rejected">Đã từ chối</option>
+        </select>
+        <input type="text" id="filterSearch" placeholder="🔍 Tìm kiếm..." oninput="currentPage=1;loadData()" style="flex:1;max-width:300px;">
+        <select id="pageSize" onchange="currentPage=1;loadData()">
+            <option value="10">10/trang</option><option value="20">20/trang</option><option value="50">50/trang</option>
+        </select>
+    </div>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr>
+                <th>Mã</th><th>Người nộp</th><th>CMND</th><th>SĐT</th><th>Ảnh</th><th>Ngày nộp</th><th>Trạng thái</th><th>Thao tác</th>
+            </tr></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <div class="empty-msg" id="emptyMsg" style="display:none">Chưa có hồ sơ nào</div>
+    </div>
+    <div class="pagination" id="pagination"></div>
+
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 id="modalTitle">Chi tiết hồ sơ</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">Đóng</button>
+                <button class="btn-save" onclick="saveEdit()">💾 Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const TOKEN = localStorage.getItem('admin_token');
+        if (!TOKEN) window.location.href = 'login.html';
+
+        let editingId = null;
+        let currentPage = 1;
+        const HEADERS = { 'Content-Type': 'application/json', 'x-admin-token': TOKEN };
+        const STATUS_LABELS = { pending: 'Chờ xử lý', approved: 'Đã phê duyệt', rejected: 'Đã từ chối' };
+        const SKIP = ['id','created_at','updated_at','image_path','client_ip','user_agent','device_cleared'];
+
+        const FIELD_LABELS = {
+            status:'Trạng thái', ten_nguoi_nop:'Tên người nộp', ngay_sinh_nguoi_nop:'Ngày sinh',
+            cmnd_nguoi_nop:'Số CMND/CCCD', ngay_cap_cmnd:'Ngày cấp CMND', noi_cap_cmnd:'Nơi cấp',
+            so_dien_thoai_nguoi_nop:'SĐT', dia_danh_hanh_chinh:'Địa danh HC', dia_chi_chi_tiet:'Địa chỉ',
+            don_vi_tiep_nhan:'ĐV tiếp nhận', don_vi_ho_tro:'ĐV hỗ trợ', linh_vuc:'Lĩnh vực',
+            thu_tuc_hanh_chinh:'Thủ tục HC', dich_vu_cong:'Dịch vụ công', commitment:'Cam kết',
+            ten_nguoi_su_dung_dat:'Tên NSD đất', ngay_sinh_su_dung_dat:'NS NSD đất',
+            cmnd_su_dung_dat:'CMND NSD đất', ngay_cap_cmnd_su_dung_dat:'Ngày cấp CMND NSD đất',
+            noi_cap_cmnd_su_dung_dat:'Nơi cấp NSD đất', so_dien_thoai_su_dung_dat:'SĐT NSD đất',
+            dia_danh_hc_su_dung_dat:'ĐD HC NSD đất', dia_chi_chi_tiet_su_dung_dat:'ĐC NSD đất',
+            ngan_hang:'Ngân hàng', so_tai_khoan:'Số TK', chu_tai_khoan:'Chủ TK',
+            co_nguoi_uy_quyen:'Có NUQ', ten_nguoi_uy_quyen:'Tên NUQ',
+            ngay_sinh_nguoi_uy_quyen:'NS NUQ', cmnd_nguoi_uy_quyen:'CMND NUQ',
+            ngay_cap_cmnd_uy_quyen:'Ngày cấp NUQ', noi_cap_cmnd_uy_quyen:'Nơi cấp NUQ',
+            sdt_nguoi_uy_quyen:'SĐT NUQ', dia_chi_nguoi_uy_quyen:'ĐC NUQ', note:'Ghi chú admin'
+        };
+
+        function showToast(msg, type = 'info') {
+            const t = document.createElement('div');
+            t.className = 'toast-msg ' + type; t.textContent = msg;
+            document.getElementById('toast-container').appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
+        // Socket.IO
+        const socket = io();
+        socket.on('new_submission', (data) => {
+            showToast(`📩 Hồ sơ mới: ${data.ten_nguoi_nop || data.id}`, 'info');
+            loadData(); loadStats();
+        });
+        socket.on('submission_updated', () => { loadData(); loadStats(); });
+        socket.on('submission_deleted', () => { loadData(); loadStats(); });
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/submissions/stats', { headers: HEADERS });
+                if (res.status === 401) { localStorage.removeItem('admin_token'); window.location.href = 'login.html'; return; }
+                const s = await res.json();
+                document.getElementById('statTotal').textContent = s.total;
+                document.getElementById('statPending').textContent = s.pending;
+                document.getElementById('statApproved').textContent = s.approved;
+                document.getElementById('statRejected').textContent = s.rejected;
+            } catch(e) {}
+        }
+
+        async function loadData() {
+            const limit = document.getElementById('pageSize').value;
+            try {
+                const res = await fetch(`/api/submissions?page=${currentPage}&limit=${limit}`, { headers: HEADERS });
+                if (res.status === 401) { localStorage.removeItem('admin_token'); window.location.href = 'login.html'; return; }
+                const { data, total, page, totalPages } = await res.json();
+                renderTable(data);
+                renderPagination(page, totalPages, total);
+            } catch(e) { showToast('Lỗi tải dữ liệu', 'error'); }
+        }
+
+        function renderTable(rows) {
+            const sf = document.getElementById('filterStatus').value;
+            const q = document.getElementById('filterSearch').value.toLowerCase();
+            let f = rows;
+            if (sf) f = f.filter(s => s.status === sf);
+            if (q) f = f.filter(s =>
+                (s.ten_nguoi_nop||'').toLowerCase().includes(q) || (s.cmnd_nguoi_nop||'').includes(q) ||
+                (s.so_dien_thoai_nguoi_nop||'').includes(q) || (s.id||'').toLowerCase().includes(q)
+            );
+            const tbody = document.getElementById('tableBody');
+            document.getElementById('emptyMsg').style.display = f.length ? 'none' : 'block';
+            if (!f.length) { tbody.innerHTML = ''; return; }
+            tbody.innerHTML = f.map(s => `<tr>
+                <td><strong>${s.id}</strong></td>
+                <td>${s.ten_nguoi_nop || '-'}</td>
+                <td>${s.cmnd_nguoi_nop || '-'}</td>
+                <td>${s.so_dien_thoai_nguoi_nop || '-'}</td>
+                <td>${s.image_path ? '🖼️' : '—'}</td>
+                <td>${new Date(s.created_at).toLocaleString('vi-VN')}</td>
+                <td><span class="badge ${s.status}">${STATUS_LABELS[s.status]||s.status}</span></td>
+                <td>
+                    <button class="action-btn btn-view" onclick="viewDetail('${s.id}')">Xem</button>
+                    ${s.status==='pending'?`
+                        <button class="action-btn btn-approve" onclick="changeStatus('${s.id}','approved')">✓</button>
+                        <button class="action-btn btn-reject" onclick="changeStatus('${s.id}','rejected')">✗</button>
+                    `:''}
+                    ${!s.device_cleared?`<button class="action-btn btn-clear" onclick="clearDevice('${s.id}')">🔄</button>`:''}
+                    <button class="action-btn btn-delete" onclick="deleteItem('${s.id}')">🗑</button>
+                </td>
+            </tr>`).join('');
+        }
+
+        function renderPagination(page, totalPages, total) {
+            if (totalPages <= 1) { document.getElementById('pagination').innerHTML = ''; return; }
+            let html = `<button ${page<=1?'disabled':''} onclick="currentPage=${page-1};loadData()">← Trước</button>`;
+            const start = Math.max(1, page - 2), end = Math.min(totalPages, page + 2);
+            if (start > 1) html += `<button onclick="currentPage=1;loadData()">1</button>`;
+            if (start > 2) html += `<span>...</span>`;
+            for (let i = start; i <= end; i++) {
+                html += `<button class="${i===page?'active':''}" onclick="currentPage=${i};loadData()">${i}</button>`;
+            }
+            if (end < totalPages-1) html += `<span>...</span>`;
+            if (end < totalPages) html += `<button onclick="currentPage=${totalPages};loadData()">${totalPages}</button>`;
+            html += `<button ${page>=totalPages?'disabled':''} onclick="currentPage=${page+1};loadData()">Sau →</button>`;
+            html += `<span style="margin-left:12px">${total} hồ sơ</span>`;
+            document.getElementById('pagination').innerHTML = html;
+        }
+
+        async function viewDetail(id) {
+            const res = await fetch(`/api/submissions/${id}`, { headers: HEADERS });
+            const item = await res.json();
+            editingId = id;
+
+            let html = `<div class="field"><label>Mã hồ sơ</label><div style="font-size:15px;font-weight:600;color:#903938">${item.id}</div></div>`;
+
+            // Status dropdown
+            html += `<div class="field"><label>Trạng thái</label>
+                <select data-field="status">
+                    <option value="pending" ${item.status==='pending'?'selected':''}>Chờ xử lý</option>
+                    <option value="approved" ${item.status==='approved'?'selected':''}>Đã phê duyệt</option>
+                    <option value="rejected" ${item.status==='rejected'?'selected':''}>Đã từ chối</option>
+                </select></div>`;
+
+            // All editable fields
+            html += '<div class="field-row">';
+            let c = 0;
+            for (const [key, val] of Object.entries(item)) {
+                if (SKIP.includes(key) || key === 'status' || key === 'note') continue;
+                const label = FIELD_LABELS[key] || key;
+                if (key === 'commitment' || key === 'co_nguoi_uy_quyen') {
+                    html += `<div class="field"><label>${label}</label><div style="font-size:14px">${val ? '✅ Có' : '❌ Không'}</div></div>`;
+                } else {
+                    const inputType = key.includes('ngay') ? 'date' : 'text';
+                    html += `<div class="field"><label>${label}</label><input type="${inputType}" data-field="${key}" value="${val || ''}"></div>`;
+                }
+                c++;
+                if (c % 2 === 0) html += '</div><div class="field-row">';
+            }
+            html += '</div>';
+
+            // Image upload
+            html += `<div class="field" style="margin-top:16px;border-top:1px solid #eee;padding-top:16px;">
+                <label>ẢNH HỒ SƠ</label>
+                <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+                    ${item.image_path ?
+                        `<img src="/${item.image_path}" alt="Ảnh"><p style="margin-top:8px;color:#888;font-size:12px;">Click để thay đổi</p>` :
+                        `<p style="color:#888;">📷 Click để upload ảnh</p>`}
+                </div>
+                <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="uploadImage(this)">
+            </div>`;
+
+            // Note
+            html += `<div class="field"><label>Ghi chú admin</label><textarea data-field="note">${item.note || ''}</textarea></div>`;
+            html += `<div class="field"><label>Ngày nộp</label><div style="font-size:14px">${new Date(item.created_at).toLocaleString('vi-VN')}</div></div>`;
+
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('modalTitle').textContent = 'Hồ sơ: ' + id;
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        async function uploadImage(input) {
+            if (!input.files[0] || !editingId) return;
+            const fd = new FormData();
+            fd.append('image', input.files[0]);
+            try {
+                const res = await fetch(`/api/submissions/${editingId}/upload`, {
+                    method: 'POST', headers: { 'x-admin-token': TOKEN }, body: fd
+                });
+                const data = await res.json();
+                if (data.success) { showToast('Upload thành công!', 'success'); viewDetail(editingId); }
+                else showToast(data.error || 'Upload thất bại', 'error');
+            } catch(e) { showToast('Lỗi upload', 'error'); }
+        }
+
+        async function saveEdit() {
+            if (!editingId) return;
+            const body = {};
+            document.querySelectorAll('#modalBody [data-field]').forEach(el => {
+                body[el.dataset.field] = el.value;
+            });
+            await fetch(`/api/submissions/${editingId}`, {
+                method: 'PUT', headers: HEADERS, body: JSON.stringify(body)
+            });
+            showToast('Đã lưu thay đổi', 'success');
+            closeModal(); loadData(); loadStats();
+        }
+
+        async function changeStatus(id, status) {
+            await fetch(`/api/submissions/${id}`, {
+                method: 'PUT', headers: HEADERS, body: JSON.stringify({ status })
+            });
+            showToast(`${STATUS_LABELS[status]} hồ sơ ${id}`, 'success');
+            loadData(); loadStats();
+        }
+
+        async function deleteItem(id) {
+            const confirmed = await showConfirmDialog('Xóa hồ sơ', `Bạn có chắc muốn xóa hồ sơ <strong>${id}</strong>? Hành động này không thể hoàn tác.`);
+            if (!confirmed) return;
+            await fetch(`/api/submissions/${id}`, { method: 'DELETE', headers: HEADERS });
+            showToast('Đã xóa', 'info'); loadData(); loadStats();
+        }
+
+        async function clearDevice(id) {
+            await fetch(`/api/submissions/${id}/clear-device`, { method: 'POST', headers: HEADERS });
+            showToast('Đã clear thiết bị', 'success'); loadData();
+        }
+
+        // Custom confirm dialog
+        function showConfirmDialog(title, message) {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('confirmOverlay');
+                document.getElementById('confirmTitle').textContent = title;
+                document.getElementById('confirmMsg').innerHTML = message;
+                overlay.style.display = 'flex';
+                document.getElementById('confirmYes').onclick = () => { overlay.style.display = 'none'; resolve(true); };
+                document.getElementById('confirmNo').onclick = () => { overlay.style.display = 'none'; resolve(false); };
+                overlay.onclick = (e) => { if (e.target === overlay) { overlay.style.display = 'none'; resolve(false); } };
+            });
+        }
+
+        function closeModal() { document.getElementById('detailModal').classList.remove('active'); editingId = null; }
+        function logout() {
+            fetch('/api/admin/logout', { method: 'POST', headers: HEADERS });
+            localStorage.removeItem('admin_token'); window.location.href = 'login.html';
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        loadData(); loadStats();
+    </script>
+
+    <!-- Custom confirm dialog -->
+    <div id="confirmOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:2000;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:14px;width:90%;max-width:400px;box-shadow:0 12px 40px rgba(0,0,0,0.3);overflow:hidden;">
+            <div style="background:#e74c3c;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:8px;">
+                <span style="font-size:20px;">⚠️</span>
+                <strong id="confirmTitle" style="font-size:15px;">Xác nhận</strong>
+            </div>
+            <div style="padding:20px;">
+                <p id="confirmMsg" style="font-size:14px;color:#333;line-height:1.6;margin:0;"></p>
+            </div>
+            <div style="padding:0 20px 16px;display:flex;gap:8px;">
+                <button id="confirmNo" style="flex:1;padding:10px;background:#f0f0f0;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;color:#333;">Hủy</button>
+                <button id="confirmYes" style="flex:1;padding:10px;background:#e74c3c;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;color:#fff;">Xóa</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

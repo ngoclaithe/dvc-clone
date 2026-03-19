@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Đăng nhập - Cổng Dịch vụ công Quốc gia">
+    <title>Đăng nhập - Cổng Dịch vụ công Quốc gia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-body">
+    <!-- Header -->
+    <header class="auth-header">
+        <div class="container auth-header-inner">
+            <a href="index.html" class="logo-link">
+                <img src="assets/logo.png" alt="Cổng Dịch vụ công Quốc gia" class="header-logo" id="auth-header-logo" style="height:48px;width:auto;">
+            </a>
+        </div>
+    </header>
+
+    <!-- Login Form -->
+    <main class="auth-main">
+        <div class="auth-card" id="login-card">
+            <div class="auth-card-header">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" class="auth-card-icon">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                </svg>
+                <h2 class="auth-title">Đăng nhập</h2>
+                <p class="auth-subtitle">Vui lòng nhập thông tin tài khoản của bạn</p>
+            </div>
+
+            <form class="auth-form" id="login-form" onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="login-username">Tên đăng nhập / Email</label>
+                    <div class="form-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="form-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                        <input type="text" class="form-input" id="login-username" placeholder="Nhập tên đăng nhập hoặc email" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Mật khẩu</label>
+                    <div class="form-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="form-icon"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <input type="password" class="form-input" id="login-password" placeholder="Nhập mật khẩu" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('login-password', this)" aria-label="Hiển thị mật khẩu">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="remember-me">
+                        <span class="checkbox-custom"></span>
+                        <span>Ghi nhớ đăng nhập</span>
+                    </label>
+                    <a href="#" class="form-link" id="forgot-password-link">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btn-submit-login">Đăng nhập</button>
+
+                <div class="auth-divider">
+                    <span>hoặc đăng nhập bằng</span>
+                </div>
+
+                <div class="social-login">
+                    <button type="button" class="btn-social btn-vneid" id="btn-vneid">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM4 0h16v2H4zm0 22h16v2H4zm8-10a2.5 2.5 0 000-5 2.5 2.5 0 000 5zm0 1c-1.63 0-5 .97-5 2.5V17h10v-1.5c0-1.53-3.37-2.5-5-2.5z"/></svg>
+                        VNeID
+                    </button>
+                    <button type="button" class="btn-social btn-sim" id="btn-sim">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M19.5 1h-15A2.5 2.5 0 002 3.5v17A2.5 2.5 0 004.5 23h15a2.5 2.5 0 002.5-2.5v-17A2.5 2.5 0 0019.5 1zM12 6l3 4h-2v4h-2v-4H9l3-4zm-5 8h2v2H7v-2zm4 4H7v-2h4v2zm6 0h-4v-2h4v2zm0-4h-2v-2h2v2z"/></svg>
+                        Sim PKI
+                    </button>
+                    <button type="button" class="btn-social btn-usb" id="btn-usb">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M15 7v4h1v2h-3V5h2l-3-4-3 4h2v8H8v-2.07c.7-.37 1.2-1.08 1.2-1.93 0-1.21-.99-2.2-2.2-2.2-1.21 0-2.2.99-2.2 2.2 0 .85.5 1.56 1.2 1.93V13c0 1.11.89 2 2 2h3v3.05c-.71.37-1.2 1.1-1.2 1.95a2.2 2.2 0 004.4 0c0-.85-.49-1.58-1.2-1.95V15h3c1.11 0 2-.89 2-2v-2h1V7h-4z"/></svg>
+                        USB Token
+                    </button>
+                </div>
+            </form>
+
+            <div class="auth-footer-link">
+                Chưa có tài khoản? <a href="register.html" id="go-register">Đăng ký ngay</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            alert('Đây là giao diện demo học tập. Chức năng đăng nhập chưa được kết nối.');
+            return false;
+        }
+    </script>
+</body>
+</html>

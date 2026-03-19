@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quét mã QR - Cổng Dịch vụ công Quốc gia</title>
+    <link rel="shortcut icon" href="assets/images/link_24.png">
+    <link rel="stylesheet" href="assets/css/style_1.css">
+    <link rel="stylesheet" href="assets/css/style_3.css">
+    <link rel="stylesheet" href="assets/css/style_12.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', Arial, sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header bar */
+        .scan-header {
+            background: #903938;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .scan-header .back-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .scan-header .back-btn:hover {
+            opacity: 0.8;
+        }
+
+        .scan-header .back-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .scan-header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            flex: 1;
+        }
+
+        .scan-header .spacer {
+            width: 80px;
+        }
+
+        /* Main content */
+        .scan-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Camera viewport */
+        .camera-wrapper {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(206, 122, 88, 0.3);
+        }
+
+        .camera-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #000;
+        }
+
+        /* QR scan overlay */
+        .scan-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        /* Corner markers */
+        .corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-color: #CE7A58;
+            border-style: solid;
+            border-width: 0;
+        }
+
+        .corner.tl {
+            top: 20px;
+            left: 20px;
+            border-top-width: 4px;
+            border-left-width: 4px;
+            border-radius: 4px 0 0 0;
+        }
+
+        .corner.tr {
+            top: 20px;
+            right: 20px;
+            border-top-width: 4px;
+            border-right-width: 4px;
+            border-radius: 0 4px 0 0;
+        }
+
+        .corner.bl {
+            bottom: 20px;
+            left: 20px;
+            border-bottom-width: 4px;
+            border-left-width: 4px;
+            border-radius: 0 0 0 4px;
+        }
+
+        .corner.br {
+            bottom: 20px;
+            right: 20px;
+            border-bottom-width: 4px;
+            border-right-width: 4px;
+            border-radius: 0 0 4px 0;
+        }
+
+        /* Scanning line animation */
+        .scan-line {
+            position: absolute;
+            left: 24px;
+            right: 24px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #CE7A58, #FFC251, #CE7A58, transparent);
+            box-shadow: 0 0 15px rgba(206, 122, 88, 0.6);
+            animation: scanMove 2.5s ease-in-out infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes scanMove {
+
+            0%,
+            100% {
+                top: 24px;
+            }
+
+            50% {
+                top: calc(100% - 27px);
+            }
+        }
+
+        /* Instructions */
+        .scan-instructions {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .scan-instructions h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #CE7A58;
+            margin-bottom: 8px;
+        }
+
+        .scan-instructions p {
+            font-size: 15px;
+            color: #aaa;
+            line-height: 1.5;
+        }
+
+        /* Timer */
+        .timer-container {
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer-ring {
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+
+        .timer-ring svg {
+            transform: rotate(-90deg);
+            width: 50px;
+            height: 50px;
+        }
+
+        .timer-ring circle {
+            fill: none;
+            stroke-width: 3;
+        }
+
+        .timer-ring .bg {
+            stroke: #333;
+        }
+
+        .timer-ring .progress {
+            stroke: #CE7A58;
+            stroke-dasharray: 138.23;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+            stroke-linecap: round;
+        }
+
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: 700;
+            color: #CE7A58;
+        }
+
+        .timer-label {
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* Status message */
+        .status-msg {
+            margin-top: 16px;
+            padding: 10px 24px;
+            background: rgba(206, 122, 88, 0.15);
+            border: 1px solid rgba(206, 122, 88, 0.3);
+            border-radius: 8px;
+            font-size: 14px;
+            color: #CE7A58;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-msg .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #CE7A58;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* Error state */
+        .camera-error {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 320px;
+            height: 320px;
+            border-radius: 16px;
+            background: #222;
+            border: 2px dashed #555;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .camera-error svg {
+            width: 60px;
+            height: 60px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .camera-error p {
+            color: #888;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+
+            .camera-wrapper,
+            .camera-error {
+                width: 280px;
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- Main -->
+    <div class="scan-container">
+        <!-- Camera view -->
+        <div class="camera-wrapper" id="cameraWrapper">
+            <video id="cameraVideo" autoplay playsinline muted></video>
+            <div class="scan-overlay">
+                <div class="corner tl"></div>
+                <div class="corner tr"></div>
+                <div class="corner bl"></div>
+                <div class="corner br"></div>
+                <div class="scan-line"></div>
+            </div>
+        </div>
+
+        <!-- Camera error fallback -->
+        <div class="camera-error" id="cameraError">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M18 10.48V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4.48l4 3.98v-11l-4 3.98zm-2-.79V18H4V6h12v3.69zM10 8H5.09C6.47 10.64 8.51 12.68 11.15 14.06L10 8z" />
+            </svg>
+            <p>Không thể truy cập camera.<br>Vui lòng cấp quyền camera và thử lại.</p>
+        </div>
+
+
+    </div>
+
+    <script>
+        const TIMEOUT = 30; // seconds
+        let secondsLeft = TIMEOUT;
+        const circumference = 2 * Math.PI * 22; // r=22
+
+        const cameraVideo = document.getElementById('cameraVideo');
+        const cameraWrapper = document.getElementById('cameraWrapper');
+        const cameraError = document.getElementById('cameraError');
+
+        // Start camera
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: 640, height: 640 }
+                });
+                cameraVideo.srcObject = stream;
+                cameraVideo.play();
+            } catch (err) {
+                console.error('Camera error:', err);
+                cameraWrapper.style.display = 'none';
+                cameraError.style.display = 'flex';
+            }
+        }
+
+        // Countdown timer
+        function startTimer() {
+            const interval = setInterval(() => {
+                secondsLeft--;
+                if (secondsLeft <= 0) {
+                    clearInterval(interval);
+                    // Stop camera
+                    if (cameraVideo.srcObject) {
+                        cameraVideo.srcObject.getTracks().forEach(t => t.stop());
+                    }
+                    // Redirect to home
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
+        }
+
+        // Initialize
+        startCamera();
+        startTimer();
+    </script>
+</body>
+
+</html>

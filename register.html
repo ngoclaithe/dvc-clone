@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Đăng ký tài khoản - Cổng Dịch vụ công Quốc gia">
+    <title>Đăng ký - Cổng Dịch vụ công Quốc gia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-body">
+    <!-- Header -->
+    <header class="auth-header">
+        <div class="container auth-header-inner">
+            <a href="index.html" class="logo-link">
+                <img src="assets/logo.png" alt="Cổng Dịch vụ công Quốc gia" class="header-logo" id="auth-header-logo" style="height:48px;width:auto;">
+            </a>
+        </div>
+    </header>
+
+    <!-- Register Form -->
+    <main class="auth-main">
+        <div class="auth-card" id="register-card">
+            <div class="auth-card-header">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48" class="auth-card-icon">
+                    <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                <h2 class="auth-title">Đăng ký tài khoản</h2>
+                <p class="auth-subtitle">Tạo tài khoản mới trên Cổng Dịch vụ công Quốc gia</p>
+            </div>
+
+            <form class="auth-form" id="register-form" onsubmit="return handleRegister(event)">
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label class="form-label" for="reg-lastname">Họ và tên đệm</label>
+                        <div class="form-input-wrapper">
+                            <input type="text" class="form-input" id="reg-lastname" placeholder="Nguyễn Văn" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="reg-firstname">Tên</label>
+                        <div class="form-input-wrapper">
+                            <input type="text" class="form-input" id="reg-firstname" placeholder="An" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-email">Email</label>
+                    <div class="form-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="form-icon"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <input type="email" class="form-input" id="reg-email" placeholder="email@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-phone">Số điện thoại</label>
+                    <div class="form-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="form-icon"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                        <input type="tel" class="form-input" id="reg-phone" placeholder="0912345678" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-cccd">Số CCCD / CMND</label>
+                    <div class="form-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="form-icon"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM4 0h16v2H4zm0 22h16v2H4zm8-10a2.5 2.5 0 000-5 2.5 2.5 0 000 5zm0 1c-1.63 0-5 .97-5 2.5V17h10v-1.5c0-1.53-3.37-2.5-5-2.5z"/></svg>
+                        <input type="text" class="form-input" id="reg-cccd" placeholder="Số căn cước công dân" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-password">Mật khẩu</label>
+                    <div class="form-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="form-icon"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <input type="password" class="form-input" id="reg-password" placeholder="Tối thiểu 8 ký tự" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('reg-password')" aria-label="Hiển thị mật khẩu">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-password-confirm">Xác nhận mật khẩu</label>
+                    <div class="form-input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="form-icon"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <input type="password" class="form-input" id="reg-password-confirm" placeholder="Nhập lại mật khẩu" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="agree-terms" required>
+                        <span class="checkbox-custom"></span>
+                        <span>Tôi đồng ý với <a href="#" class="form-link">Điều khoản sử dụng</a></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btn-submit-register">Đăng ký</button>
+            </form>
+
+            <div class="auth-footer-link">
+                Đã có tài khoản? <a href="login.html" id="go-login">Đăng nhập</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const pw = document.getElementById('reg-password').value;
+            const pwConfirm = document.getElementById('reg-password-confirm').value;
+            if (pw !== pwConfirm) {
+                alert('Mật khẩu xác nhận không khớp!');
+                return false;
+            }
+            alert('Đây là giao diện demo học tập. Chức năng đăng ký chưa được kết nối.');
+            return false;
+        }
+    </script>
+</body>
+</html>
