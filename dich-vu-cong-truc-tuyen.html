@@ -43,7 +43,7 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-8 col-8">
                         <div class="d-flex align-items-center header-logo-section" style="cursor:pointer">
-                            <img src="assets/images/img_101.png" alt="Logo" class="me-2 me-md-3 logo-img">
+                            <a href="index.html"><img src="assets/images/img_101.png" alt="Logo" class="me-2 me-md-3 logo-img"></a>
                             <div class="header-text-section d-md-block">
                                 <h4 class="mb-0 text-danger fw-bold header-title fs-6 fs-md-5">
                                     HỆ THỐNG THÔNG TIN GIẢI QUYẾT THỦ TỤC HÀNH CHÍNH
@@ -53,6 +53,9 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-8 col-8">
                         <div class="d-flex justify-content-end align-items-center">
+                            <button class="btn btn-outline-danger" id="btn-logout" style="display:none;" onclick="logoutDevice()">
+                                <i class="fas fa-sign-out-alt me-1"></i>Đăng xuất
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -62,25 +65,6 @@
             <div class="col-12 mt-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="mb-0">NỘP HỒ SƠ</h5>
-                    <div class="d-flex gap-2" id="top-buttons">
-                        <button class="btn btn-outline-secondary" onclick="submitForm()">
-                            <i class="fas fa-save me-1"></i>Lưu hồ sơ
-                        </button>
-                        <button class="btn btn-outline-danger" onclick="window.location.href='index.html'">
-                            <i class="fas fa-times me-1"></i>Đóng
-                        </button>
-                    </div>
-                </div>
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="commitment" value="on">
-                            <label class="form-check-label" for="commitment">
-                                Tôi cam kết chịu trách nhiệm trước pháp luật về tính hợp pháp, chính xác của các giấy tờ
-                                có trong hồ sơ và cung cấp đầy đủ thông tin có liên quan
-                            </label>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="card mb-4">
@@ -432,6 +416,45 @@
         </div>
     </div>
 
+    <!-- Custom confirm dialog -->
+    <div id="confirmDialog" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:10001;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:16px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;animation:dialogIn 0.25s ease;">
+            <div style="padding:24px 24px 16px 24px;text-align:center;">
+                <div style="width:56px;height:56px;border-radius:50%;background:#fff3e0;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                    <span style="font-size:28px;">⚠️</span>
+                </div>
+                <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;color:#333;" id="confirmTitle">Xác nhận đăng xuất</h5>
+                <p style="margin:0;color:#666;font-size:14px;line-height:1.5;" id="confirmMessage">Bạn có chắc muốn đăng xuất? Bạn sẽ có thể tạo hồ sơ mới.</p>
+            </div>
+            <div style="padding:0 24px 20px;display:flex;gap:10px;">
+                <button id="confirmCancel" style="flex:1;padding:11px;background:#f0f0f0;color:#555;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s;">
+                    Hủy
+                </button>
+                <button id="confirmOk" style="flex:1;padding:11px;background:#e74c3c;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s;">
+                    Đăng xuất
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info dialog (single button OK) -->
+    <div id="infoDialog" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:10002;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:16px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;animation:dialogIn 0.25s ease;">
+            <div style="padding:24px 24px 16px 24px;text-align:center;">
+                <div id="infoDialogIconWrap" style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                    <span id="infoDialogIcon" style="font-size:28px;"></span>
+                </div>
+                <h5 style="margin:0 0 8px;font-size:17px;font-weight:700;color:#333;" id="infoTitle"></h5>
+                <p style="margin:0;color:#666;font-size:14px;line-height:1.5;" id="infoMessage"></p>
+            </div>
+            <div style="padding:0 24px 20px;">
+                <button id="infoOkBtn" style="width:100%;padding:11px;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s;">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
     <style>
         .toast-msg {
             padding: 12px 20px;
@@ -489,6 +512,31 @@
             animation: shakeField 0.4s ease;
         }
 
+        .field-locked {
+            opacity: 0.6 !important;
+            background-color: #f0f0f0 !important;
+            cursor: not-allowed !important;
+            pointer-events: none;
+        }
+
+        #btn-logout {
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        #btn-logout:hover {
+            background-color: #e74c3c;
+            color: #fff;
+            border-color: #e74c3c;
+        }
+
+        @keyframes dialogIn {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
         @keyframes shakeField {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-6px); }
@@ -524,15 +572,158 @@
         // Check if this device already has a submission (by IP+UA on server)
         async function checkDevice() {
             try {
-                const res = await fetch('/api/public/check-device');
-                const data = await res.json();
-                if (data.found) {
-                    currentSubmissionId = data.id;
+                const res = await fetch('/api/public/submission-data');
+                const result = await res.json();
+                if (result.found) {
+                    currentSubmissionId = result.data.id;
                     showKhobacSection();
+                    fillAndLockForm(result.data);
                 }
             } catch (e) { }
         }
         checkDevice();
+
+        // Fill form with saved data and lock all fields
+        function fillAndLockForm(data) {
+            // Show logout button
+            document.getElementById('btn-logout').style.display = 'inline-block';
+
+            // Hide submit buttons
+            var bottomBtn = document.getElementById('bottom-buttons');
+            if (bottomBtn) { bottomBtn.style.display = 'none'; bottomBtn.parentElement.style.display = 'none'; }
+
+            // Map DB column names to form field IDs
+            const fieldMap = {
+                'don_vi_tiep_nhan': 'don_vi_tiep_nhan_thong_tin_chung',
+                'don_vi_ho_tro': 'don_vi_ho_tro_thong_tin_chung',
+                'linh_vuc': 'linh_vuc_thong_tin_chung',
+                'thu_tuc_hanh_chinh': 'thu_tuc_hanh_chinh_thong_tin_chung',
+                'dich_vu_cong': 'dich_vu_cong_thong_tin_chung',
+                'ten_nguoi_nop': 'ten_nguoi_nop_ho_so',
+                'ngay_sinh_nguoi_nop': 'ngay_sinh_nguoi_nop_ho_so',
+                'cmnd_nguoi_nop': 'cmnd_nguoi_nop_ho_so',
+                'ngay_cap_cmnd': 'ngay_cap_cmnd_nguoi_nop_ho_so',
+                'noi_cap_cmnd': 'noi_cap_cmnd_nguoi_nop_ho_so',
+                'so_dien_thoai_nguoi_nop': 'so_dien_thoai_nguoi_nop_ho_so',
+                'dia_danh_hanh_chinh': 'dia_danh_hanh_chinh_nguoi_nop_ho_so',
+                'dia_chi_chi_tiet': 'dia_chi_chi_tiet_nguoi_nop_ho_so',
+                'ten_nguoi_su_dung_dat': 'ten_nguoi_su_dung_dat_thong_tin',
+                'dia_chi_chi_tiet_su_dung_dat': 'dia_chi_chi_tiet_nguoi_su_dung_dat',
+                'so_dien_thoai_su_dung_dat': 'so_dien_thoai_nguoi_su_dung_dat',
+                'ngan_hang': 'ngan_hang',
+                'so_tai_khoan': 'so_tai_khoan',
+                'chu_tai_khoan': 'chu_tai_khoan',
+                'ten_nguoi_uy_quyen': 'ten_nguoi_uy_quyen',
+                'ngay_sinh_nguoi_uy_quyen': 'ngay_sinh_nguoi_uy_quyen',
+                'cmnd_nguoi_uy_quyen': 'cmnd_nguoi_uy_quyen',
+                'ngay_cap_cmnd_uy_quyen': 'ngay_cap_cmnd_uy_quyen',
+                'noi_cap_cmnd_uy_quyen': 'noi_cap_cmnd_uy_quyen',
+                'sdt_nguoi_uy_quyen': 'sdt_nguoi_uy_quyen',
+                'dia_chi_nguoi_uy_quyen': 'dia_chi_nguoi_uy_quyen'
+            };
+
+            // Fill values
+            for (const [dbKey, fieldId] of Object.entries(fieldMap)) {
+                const el = document.getElementById(fieldId);
+                if (el && data[dbKey]) {
+                    el.value = data[dbKey];
+                }
+            }
+
+            // Show ủy quyền section if applicable
+            if (data.co_nguoi_uy_quyen) {
+                document.getElementById('co_nguoi_uy_quyen').checked = true;
+                document.getElementById('authorized-person-section').style.display = 'block';
+            }
+
+            // Disable all inputs and selects, add dimmed class
+            document.querySelectorAll('input, select').forEach(el => {
+                el.disabled = true;
+                el.classList.add('field-locked');
+            });
+        }
+
+        // Logout: clear device and reload
+        function logoutDevice() {
+            showConfirmDialog('Xác nhận đăng xuất', 'Bạn có chắc muốn đăng xuất? Bạn sẽ có thể tạo hồ sơ mới.', async () => {
+                try {
+                    const res = await fetch('/api/public/logout', { method: 'POST' });
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast('Đăng xuất thành công!', 'success');
+                        setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                        showToast('Không thể đăng xuất', 'error');
+                    }
+                } catch (e) {
+                    showToast('Lỗi kết nối', 'error');
+                }
+            });
+        }
+
+        // Custom confirm dialog
+        function showConfirmDialog(title, message, onConfirm) {
+            const dialog = document.getElementById('confirmDialog');
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            dialog.style.display = 'flex';
+
+            const okBtn = document.getElementById('confirmOk');
+            const cancelBtn = document.getElementById('confirmCancel');
+
+            // Clean up old listeners
+            const newOk = okBtn.cloneNode(true);
+            const newCancel = cancelBtn.cloneNode(true);
+            okBtn.parentNode.replaceChild(newOk, okBtn);
+            cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
+
+            newCancel.addEventListener('click', () => { dialog.style.display = 'none'; });
+            newOk.addEventListener('click', () => {
+                dialog.style.display = 'none';
+                onConfirm();
+            });
+            dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.style.display = 'none'; });
+        }
+
+        // Info dialog (single OK button)
+        function showInfoDialog(title, message, type, onClose) {
+            const dialog = document.getElementById('infoDialog');
+            document.getElementById('infoTitle').textContent = title;
+            document.getElementById('infoMessage').textContent = message;
+
+            const iconWrap = document.getElementById('infoDialogIconWrap');
+            const icon = document.getElementById('infoDialogIcon');
+            const okBtn = document.getElementById('infoOkBtn');
+
+            const styles = {
+                success: { bg: '#e8f5e9', icon: '✅', btnBg: '#27ae60' },
+                error:   { bg: '#fdecea', icon: '❌', btnBg: '#e74c3c' },
+                warning: { bg: '#fff3e0', icon: '⚠️', btnBg: '#f39c12' },
+                info:    { bg: '#e3f2fd', icon: 'ℹ️', btnBg: '#3498db' }
+            };
+            const s = styles[type] || styles.info;
+            iconWrap.style.background = s.bg;
+            icon.textContent = s.icon;
+            okBtn.style.background = s.btnBg;
+
+            dialog.style.display = 'flex';
+
+            // Clean up old listeners
+            const newOk = okBtn.cloneNode(true);
+            newOk.style.background = s.btnBg;
+            okBtn.parentNode.replaceChild(newOk, okBtn);
+
+            newOk.addEventListener('click', () => {
+                dialog.style.display = 'none';
+                if (onClose) onClose();
+            });
+            dialog.addEventListener('click', (e) => {
+                if (e.target === dialog) {
+                    dialog.style.display = 'none';
+                    if (onClose) onClose();
+                }
+            });
+        }
 
         function showKhobacSection() {
             document.getElementById('khobac-section').style.display = 'block';
@@ -543,16 +734,7 @@
             // Reset previous highlights
             document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
 
-            // 1. Check commitment checkbox
-            const commitment = document.getElementById('commitment');
-            if (!commitment.checked) {
-                showToast('Vui lòng tích xác nhận cam kết trước khi nộp hồ sơ', 'warning');
-                commitment.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                commitment.parentElement.style.outline = '2px solid #e74c3c';
-                commitment.parentElement.style.borderRadius = '6px';
-                setTimeout(() => commitment.parentElement.style.outline = '', 3000);
-                return;
-            }
+
 
             // 2. Check all required fields (except in hidden sections)
             const requiredFields = document.querySelectorAll('input[required], select[required]');
@@ -602,22 +784,26 @@
                 });
                 const result = await res.json();
                 if (result.success) {
-                    showToast('Nộp hồ sơ thành công! Mã: ' + result.id, 'success');
                     currentSubmissionId = result.id;
                     showKhobacSection();
                     // Ẩn các nút Lưu hồ sơ / Đóng
-                    var topBtn = document.getElementById('top-buttons');
                     var bottomBtn = document.getElementById('bottom-buttons');
-                    if (topBtn) { topBtn.style.display = 'none'; topBtn.parentElement.style.display = 'none'; }
                     if (bottomBtn) { bottomBtn.style.display = 'none'; bottomBtn.parentElement.style.display = 'none'; }
-                    document.getElementById('khobac-section').scrollIntoView({ behavior: 'smooth' });
-                    // Chuyển về trang chủ sau 10s
-                    setTimeout(() => { window.location.href = 'index.html'; }, 10000);
+                    // Hiện nút Đăng xuất
+                    document.getElementById('btn-logout').style.display = 'inline-block';
+                    // Khóa form, làm mờ tất cả input
+                    document.querySelectorAll('input, select').forEach(el => {
+                        el.disabled = true;
+                        el.classList.add('field-locked');
+                    });
+                    showInfoDialog('Nộp hồ sơ thành công!', 'Mã hồ sơ của bạn: ' + result.id, 'success', () => {
+                        document.getElementById('khobac-section').scrollIntoView({ behavior: 'smooth' });
+                    });
                 } else {
-                    showToast(result.error || 'Không thể nộp hồ sơ', 'error');
+                    showInfoDialog('Không thể nộp hồ sơ', result.error || 'Vui lòng thử lại sau.', 'error');
                 }
             } catch (e) {
-                showToast('Lỗi kết nối server. Vui lòng thử lại.', 'error');
+                showInfoDialog('Lỗi kết nối', 'Không thể kết nối đến server. Vui lòng thử lại.', 'error');
             }
         }
 

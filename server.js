@@ -246,6 +246,27 @@ app.get('/api/public/check-device', (req, res) => {
   res.json({ found: true, id: row.id, hasImage: !!row.image_path, image_url: row.image_path ? '/' + row.image_path : null, status: row.status });
 });
 
+// PUBLIC: Get full submission data for current device (for readonly form display)
+app.get('/api/public/submission-data', (req, res) => {
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+  const ua = req.headers['user-agent'] || '';
+  const row = db.prepare(
+    'SELECT * FROM submissions WHERE client_ip = ? AND user_agent = ? AND device_cleared = 0 ORDER BY created_at DESC LIMIT 1'
+  ).get(ip, ua);
+  if (!row) return res.json({ found: false });
+  res.json({ found: true, data: row });
+});
+
+// PUBLIC: User logout (self-clear device so they can create a new submission)
+app.post('/api/public/logout', (req, res) => {
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+  const ua = req.headers['user-agent'] || '';
+  const result = db.prepare(
+    'UPDATE submissions SET device_cleared = 1, updated_at = ? WHERE client_ip = ? AND user_agent = ? AND device_cleared = 0'
+  ).run(new Date().toISOString(), ip, ua);
+  res.json({ success: true, cleared: result.changes });
+});
+
 // PUBLIC: Check image by ID
 app.get('/api/public/submissions/:id/image', (req, res) => {
   const row = db.prepare('SELECT image_path, status FROM submissions WHERE id = ?').get(req.params.id);
