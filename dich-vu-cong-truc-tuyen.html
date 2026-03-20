@@ -360,6 +360,18 @@
                     </div>
                 </div>
 
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="commitment" value="on">
+                            <label class="form-check-label" for="commitment">
+                                Tôi cam kết chịu trách nhiệm trước pháp luật về tính hợp pháp, chính xác của các giấy tờ
+                                có trong hồ sơ và cung cấp đầy đủ thông tin có liên quan
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="text-end mb-4" style="margin-top:20px">
                     <div class="d-flex justify-content-end gap-2" id="bottom-buttons">
                         <button class="btn btn-outline-secondary" onclick="submitForm()">
@@ -887,7 +899,14 @@
             // Reset previous highlights
             document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
 
-
+            // 1. Check commitment checkbox
+            const commitment = document.getElementById('commitment');
+            if (!commitment.checked) {
+                showInfoDialog('Chưa xác nhận cam kết', 'Vui lòng tích xác nhận cam kết trước khi nộp hồ sơ', 'warning', () => {
+                    commitment.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+                return;
+            }
 
             // 2. Check all required fields (except in hidden sections)
             const requiredFields = document.querySelectorAll('input[required], select[required]');
