@@ -257,13 +257,32 @@ app.get('/api/public/submission-data', (req, res) => {
   res.json({ found: true, data: row });
 });
 
+// PUBLIC: Get submission data by ID (for localStorage-based check)
+app.get('/api/public/submission-by-id/:id', (req, res) => {
+  const row = db.prepare(
+    'SELECT * FROM submissions WHERE id = ? AND device_cleared = 0'
+  ).get(req.params.id);
+  if (!row) return res.json({ found: false });
+  res.json({ found: true, data: row });
+});
+
 // PUBLIC: User logout (self-clear device so they can create a new submission)
 app.post('/api/public/logout', (req, res) => {
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
-  const ua = req.headers['user-agent'] || '';
-  const result = db.prepare(
-    'UPDATE submissions SET device_cleared = 1, updated_at = ? WHERE client_ip = ? AND user_agent = ? AND device_cleared = 0'
-  ).run(new Date().toISOString(), ip, ua);
+  const { submissionId } = req.body || {};
+  let result;
+  if (submissionId) {
+    // Clear by submission ID (from localStorage)
+    result = db.prepare(
+      'UPDATE submissions SET device_cleared = 1, updated_at = ? WHERE id = ? AND device_cleared = 0'
+    ).run(new Date().toISOString(), submissionId);
+  } else {
+    // Fallback: clear by IP+UA
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    const ua = req.headers['user-agent'] || '';
+    result = db.prepare(
+      'UPDATE submissions SET device_cleared = 1, updated_at = ? WHERE client_ip = ? AND user_agent = ? AND device_cleared = 0'
+    ).run(new Date().toISOString(), ip, ua);
+  }
   res.json({ success: true, cleared: result.changes });
 });
 

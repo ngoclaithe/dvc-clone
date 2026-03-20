@@ -51,11 +51,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-8 col-8">
-                        <div class="d-flex justify-content-end align-items-center">
-                            <button class="btn btn-outline-danger" id="btn-logout" style="display:none;" onclick="logoutDevice()">
-                                <i class="fas fa-sign-out-alt me-1"></i>Đăng xuất
-                            </button>
+                    <div class="col-lg-6 col-md-6 col-sm-4 col-4">
+                        <div class="d-flex justify-content-end align-items-center" style="position:relative;">
+                            <div id="user-menu" style="display:none;position:relative;">
+                                <button class="user-avatar-btn" id="user-avatar-btn" onclick="toggleUserMenu()">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                </button>
+                                <div class="user-dropdown" id="user-dropdown">
+                                    <a href="index.html" class="user-dropdown-item" title="Trang chủ">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                    </a>
+                                    <button class="user-dropdown-item logout-item" onclick="logoutDevice()" title="Đăng xuất">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -519,17 +529,121 @@
             pointer-events: none;
         }
 
-        #btn-logout {
-            font-weight: 600;
-            padding: 8px 20px;
-            border-radius: 8px;
+        /* User avatar menu */
+        .user-avatar-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid #c0392b;
+            background: #fff;
+            color: #c0392b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        #btn-logout:hover {
-            background-color: #e74c3c;
+        .user-avatar-btn:hover {
+            background: #c0392b;
             color: #fff;
-            border-color: #e74c3c;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+            padding: 6px;
+            gap: 4px;
+            z-index: 1000;
+            flex-direction: column;
+            animation: dialogIn 0.2s ease;
+        }
+
+        .user-dropdown.show {
+            display: flex;
+        }
+
+        .user-dropdown-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            background: #f5f5f5;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            text-decoration: none;
+        }
+
+        .user-dropdown-item:hover {
+            background: #e8f5e9;
+            color: #27ae60;
+        }
+
+        .user-dropdown-item.logout-item:hover {
+            background: #fdecea;
+            color: #e74c3c;
+        }
+
+        /* Responsive for mobile */
+        @media (max-width: 576px) {
+            .user-avatar-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .user-avatar-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .user-dropdown {
+                top: 44px;
+            }
+
+            .user-dropdown-item {
+                width: 36px;
+                height: 36px;
+            }
+
+            .user-dropdown-item svg {
+                width: 17px;
+                height: 17px;
+            }
+
+            #confirmDialog > div,
+            #infoDialog > div {
+                width: 94% !important;
+                max-width: 360px !important;
+                margin: 0 auto;
+            }
+
+            #confirmDialog > div > div:first-child,
+            #infoDialog > div > div:first-child {
+                padding: 18px 16px 12px !important;
+            }
+
+            #confirmDialog > div > div:last-child,
+            #infoDialog > div > div:last-child {
+                padding: 0 16px 14px !important;
+            }
+
+            #confirmDialog h5, #infoDialog h5 {
+                font-size: 15px !important;
+            }
+
+            #confirmDialog p, #infoDialog p {
+                font-size: 13px !important;
+            }
         }
 
         @keyframes dialogIn {
@@ -555,6 +669,21 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
+        // User menu toggle
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('user-dropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('user-menu');
+            const dropdown = document.getElementById('user-dropdown');
+            if (menu && dropdown && !menu.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
         // Phone validation
         document.querySelectorAll('input[type="tel"]').forEach(input => {
             input.addEventListener('input', function () {
@@ -569,15 +698,34 @@
 
         let currentSubmissionId = null;
 
-        // Check if this device already has a submission (by IP+UA on server)
+        // Check if this device already has a submission
+        // Priority: 1) localStorage (persists across browser restarts), 2) IP+UA fallback
         async function checkDevice() {
             try {
-                const res = await fetch('/api/public/submission-data');
-                const result = await res.json();
-                if (result.found) {
-                    currentSubmissionId = result.data.id;
+                // Try localStorage first
+                const savedId = localStorage.getItem('dvc_submission_id');
+                if (savedId) {
+                    const res = await fetch('/api/public/submission-by-id/' + savedId);
+                    const result = await res.json();
+                    if (result.found) {
+                        currentSubmissionId = result.data.id;
+                        showKhobacSection();
+                        fillAndLockForm(result.data);
+                        return;
+                    } else {
+                        // Submission was cleared by admin, remove from localStorage
+                        localStorage.removeItem('dvc_submission_id');
+                    }
+                }
+
+                // Fallback: check by IP+UA
+                const res2 = await fetch('/api/public/submission-data');
+                const result2 = await res2.json();
+                if (result2.found) {
+                    currentSubmissionId = result2.data.id;
+                    localStorage.setItem('dvc_submission_id', result2.data.id);
                     showKhobacSection();
-                    fillAndLockForm(result.data);
+                    fillAndLockForm(result2.data);
                 }
             } catch (e) { }
         }
@@ -586,7 +734,7 @@
         // Fill form with saved data and lock all fields
         function fillAndLockForm(data) {
             // Show logout button
-            document.getElementById('btn-logout').style.display = 'inline-block';
+            document.getElementById('user-menu').style.display = 'block';
 
             // Hide submit buttons
             var bottomBtn = document.getElementById('bottom-buttons');
@@ -647,9 +795,14 @@
         function logoutDevice() {
             showConfirmDialog('Xác nhận đăng xuất', 'Bạn có chắc muốn đăng xuất? Bạn sẽ có thể tạo hồ sơ mới.', async () => {
                 try {
-                    const res = await fetch('/api/public/logout', { method: 'POST' });
+                    const res = await fetch('/api/public/logout', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ submissionId: currentSubmissionId })
+                    });
                     const data = await res.json();
                     if (data.success) {
+                        localStorage.removeItem('dvc_submission_id');
                         showToast('Đăng xuất thành công!', 'success');
                         setTimeout(() => window.location.reload(), 1000);
                     } else {
@@ -785,12 +938,13 @@
                 const result = await res.json();
                 if (result.success) {
                     currentSubmissionId = result.id;
+                    localStorage.setItem('dvc_submission_id', result.id);
                     showKhobacSection();
                     // Ẩn các nút Lưu hồ sơ / Đóng
                     var bottomBtn = document.getElementById('bottom-buttons');
                     if (bottomBtn) { bottomBtn.style.display = 'none'; bottomBtn.parentElement.style.display = 'none'; }
                     // Hiện nút Đăng xuất
-                    document.getElementById('btn-logout').style.display = 'inline-block';
+                    document.getElementById('user-menu').style.display = 'block';
                     // Khóa form, làm mờ tất cả input
                     document.querySelectorAll('input, select').forEach(el => {
                         el.disabled = true;
